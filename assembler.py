@@ -4,7 +4,7 @@ address = 0
 
 print(
     '''
-    This program assembles a 10-bit assembly program using mneunomics.
+    This program assembles a 8-bit assembly program using mneunomics.
     The assembler is non-case sensitive and White Space is ignored.
     Registers Available :- (R0-R6), Register number should be prefixed with 'R' or 'r'.
     Immediate value should be two digit hexadecimal and prefixed with 0x.
@@ -47,4 +47,5 @@ if len(instrList) > 0:
     with open(filename, 'w') as f:
         f.write('v2.0 raw\n')
         for line in instrList:
-            f.write(line + '\n')
+            f.write(line[:2] + '\n')
+            f.write(line[2:] + '\n')
