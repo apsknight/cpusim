@@ -9,19 +9,18 @@ print(
     Registers Available :- (R0-R6), Register number should be prefixed with 'R' or 'r'.
     Immediate value should be two digit hexadecimal and prefixed with 0x.
     The Legal instructions available are:\n\n
-    ADD RegSrcA, RegSrcB or ADD RegSrcA, 0xF1 \n
-    SUB RegSrcA, RegSrcB or SUB RegSrcA, 0xF1 \n
-    JMP RegSrcA or JMP 0xF1 \n
-    AND RegSrcA, RegSrcB or AND RegSrcA, 0xF1 \n    
-    OR RegSrcA, RegSrcB or OR RegSrcA, 0xF1 \n    
-    NOT RegSrcA \n
-    XOR RegSrcA, RegSrcB or XOR RegSrcA, 0xF1 \n    
+    ADD RegSrcA, RegSrcB\n
+    SUB RegSrcA, RegSrcB\n
+    JMP JMP 0xF1 \n
+    AND RegSrcA, RegSrcB\n    
+    OR RegSrcA, RegSrcB\n    
+    MUL RegSrcA, RegSrcB \n
+    XOR RegSrcA, RegSrcB\n    
     MOV RegSrcA, RegSrcB or MOV RegSrcA, 0xF1 \n
-    LOD RegSrcA, RegSrcB or MOV RegSrcA, 0xF1 \n
-    STR RegSrcA, RegSrcB or MOV RegSrcA, 0xF1 \n
+    LOD RegSrcA, 0xF1 \n
+    STR RegSrcA, 0xF1 \n
     HLT \n\n
 
-    The last instruction of Program must be `HLT`.\n
     Enter your program one instruction per line.\n\n
     '''
 )
@@ -29,14 +28,14 @@ print(
 machineCode = 'v2.0 raw'
 instrList = []
 while True:
-    line = str(input('%s : ' % address))
+    line = str(input('0x%02d : ' % address))
+    address = address + 2
 
     try:
+        if line.strip()[:3].upper() == 'END':
+            break
         instr = makeInstruction(line)
         instrList.append(instr)
-        address = address + 1
-        if line.strip()[:3].upper() == 'HLT':
-            break
     except Exception as e:
         # print('Bad Instruction: ', e)
         raise Exception()

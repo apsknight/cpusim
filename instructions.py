@@ -4,12 +4,13 @@ ops = {
     'JMP' : '0011',
     'AND' : '0100',
     'OR'  : '0101',
-    'NOT' : '0110',
+    'MUL' : '0110',
     'XOR' : '0111',
     'MOV' : '1000',
     'LOD' : '1001',
     'STR' : '1010',
-    'HLT' : '1111' 
+    'HLT' : '1111',
+    'NOP' : '0000',
     }
 
 registers = {
@@ -23,11 +24,14 @@ registers = {
 
 def makeInstruction(line):
     op = line.split(',')[0].split()[0].upper()
-
+        
     if op not in ops:
         raise Exception('Operation %s Not Found!' % op)
     
-    if op == 'JMP':
+    if op == 'NOP':
+        i = Instruction(op, False, None, None, None, line)
+        
+    elif op == 'JMP':
         if len(line.split(',')) > 1 or len(line.split()) != 2:
             raise Exception('Instruction Format is Wrong')
         op1 = line.split()[1]
@@ -43,18 +47,18 @@ def makeInstruction(line):
         else:
             raise Exception('Bad Operand')
         
-    elif op == 'NOT':
-        if len(line.split(',')) > 1 or len(line.split()) != 2 or line.split()[1] not in registers:
-            raise Exception('Instruction Format is Wrong')
+    # elif op == 'NOT':
+    #     if len(line.split(',')) > 1 or len(line.split()) != 2 or line.split()[1] not in registers:
+    #         raise Exception('Instruction Format is Wrong')
 
-        op1 = line.split()[1]
-        i = Instruction(op, False, op1.upper(), None, None, line)
+        # op1 = line.split()[1]
+        # i = Instruction(op, False, op1.upper(), None, None, line)
 
 
     elif op == 'HLT':
         if len(line.split(',')) > 1 or len(line.split()) != 1:
             raise Exception('Instruction Format is Wrong')
-
+    
         i = Instruction(op, False, None, None, None, line)
 
     else:
@@ -102,13 +106,13 @@ class Instruction:
         if not opr in ops:
             raise Exception('Not a valid operation!')
 
-        if not src and (opr != 'JMP' and opr != 'HLT'):
+        if not src and (opr != 'JMP' and opr != 'HLT' and opr != 'NOP'):
             raise Exception('Invalid Source')
 
         if src and not src in registers:
             raise Exception('Invalid Source')
 
-        if not dest and not indirect and opr != 'JMP' and opr != 'NOT' and opr != 'HLT':
+        if not dest and not indirect and opr != 'JMP' and opr != 'HLT' and opr != 'NOP':
             raise Exception('Invalid Destination')
 
         if dest and not dest in registers:
@@ -135,7 +139,7 @@ class Instruction:
 
         if opr == 'JMP' and indirect:
             self.binaryInstr.extend(list('000'))            
-        elif opr != 'HLT':
+        elif opr != 'HLT' and opr != 'NOP':
             self.binaryInstr.extend(list(self.src))
         else:
             self.binaryInstr.extend(list('000'))
