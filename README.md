@@ -30,4 +30,4 @@ Open `cpu.circ` module in Logisim simulator, click on RAM and Load Image file ge
 [Mohnish Reddy](https://github.com/MasterRed97)
 
 ## LICENSE
-(License)[LICENSE]
+[LICENSE](License)
